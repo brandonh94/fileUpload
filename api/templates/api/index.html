@@ -1,0 +1,33 @@
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+<h1>Uploader Tool</h1>
+
+<form class="uploadFiles" method="POST">
+  {% csrf_token %}
+  <h2>Please Upload Necesssary Files</h2>
+  <input multiple type="file" id="hostVars">
+  <br><br>
+  <input type="file" id="hostFile">
+</form>
+
+<button id="submitButton">Submit</button>
+
+<script>
+  $("#submitButton").click(function(){
+    var hostVarsFiles = document.getElementById("hostVars").files[0];
+    var hostFile = document.getElementById("hostFile").files[0];
+    var formData = new FormData();
+    formData.append('file', hostFile);
+    var csrftoken = Cookies.get('csrftoken');
+    $.ajax({
+      headers:{"X-CSRFToken":csrftoken},
+      url: 'http://127.0.0.1:8000/api/',
+      data: formData,
+      dataType: 'json',
+      type: 'POST',
+      processData: false,
+      contentType: false
+    });
+  });
+</script>
